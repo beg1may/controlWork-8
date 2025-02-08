@@ -1,0 +1,1 @@
+export const BASE_URL = 'https://begimay-omurovna-default-rtdb.europe-west1.firebasedatabase.app/';
