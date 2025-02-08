@@ -59,25 +59,28 @@ const QuoteList = () => {
                 <div className="col-8">
                     <h3 className="mb-3">Quotes List</h3>
                     {loading ? <Loader /> :
-                    <ul className="list-group p-0">
-                        {quotes.map((quote) => (
-                            <li className="list-group-item" key={quote.id}>
-                                <p><strong>{quote.author}</strong></p>
-                                <p>{quote.text}</p>
-                                <NavLink to={`/quotes/${quote.id}/edit`} className="btn btn-primary ms-2">
-                                    Edit
-                                </NavLink>
-                                <button className="btn btn-danger ms-auto" onClick={() => onDelete(quote.id)}>
-                                    Delete
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                    }
+                        quotes.length === 0 ? (
+                            <p>Add a quote</p>
+                        ) : (
+                            <ul className="list-group p-0">
+                                {quotes.map((quote) => (
+                                    <li className="list-group-item" key={quote.id}>
+                                        <p><strong>{quote.author}</strong></p>
+                                        <p>{quote.text}</p>
+                                        <NavLink to={`/quotes/${quote.id}/edit`} className="btn btn-primary ms-2">
+                                            Edit
+                                        </NavLink>
+                                        <button className="btn btn-danger ms-auto" onClick={() => onDelete(quote.id)}>
+                                            Delete
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                 </div>
             </div>
         </div>
-    );
+    )
 };
 
 export default QuoteList;
