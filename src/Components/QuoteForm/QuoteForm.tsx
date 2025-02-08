@@ -1,12 +1,13 @@
 import {ApiQuote, ApiQuotes} from "../../types";
 import {FormEvent, useCallback, useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import axiosApi from "../../axiosApi.ts";
 import Loader from "../Ui/Loader/Loader.tsx";
 import {categories} from "../../categories.ts";
 
 interface Props {
     isEdit?: boolean;
+    idQuote?: string;
     onSubmitAction: (quote: ApiQuote) => void;
     quoteData?: ApiQuote;
 }
@@ -17,11 +18,10 @@ const initialState = {
     text: '',
 }
 
-const QuoteForm: React.FC<Props> = ({isEdit = false, onSubmitAction, quoteData}) => {
+const QuoteForm: React.FC<Props> = ({isEdit = false, idQuote, onSubmitAction, quoteData}) => {
     const [quote, setQuote] = useState<ApiQuote>(quoteData || initialState);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const {idQuote} = useParams();
 
     const fetchQuotes = useCallback(async () => {
         try {

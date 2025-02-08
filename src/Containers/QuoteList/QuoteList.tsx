@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {NavLink, useParams} from "react-router-dom";
 import { ApiQuotes, Quote} from "../../types";
 import axiosApi from "../../axiosApi.ts";
 import Categories from "../../Components/Categories/Categories.tsx";
@@ -35,6 +35,15 @@ const QuoteList = () => {
         }
     }, [categoryId]);
 
+    const onDelete = async (id: string) => {
+        try {
+            await axiosApi.delete<ApiQuotes>(`/quotes/${id}.json`);
+            setQuotes((prevQuotes) => prevQuotes.filter(quote => quote.id !== id));
+        } catch (e) {
+            alert(e);
+        }
+    };
+
     useEffect(() => {
         void fetchQuotes();
     }, [fetchQuotes]);
@@ -55,6 +64,12 @@ const QuoteList = () => {
                             <li className="list-group-item" key={quote.id}>
                                 <p><strong>{quote.author}</strong></p>
                                 <p>{quote.text}</p>
+                                <NavLink to={`/quotes/${quote.id}/edit`} className="btn btn-primary ms-2">
+                                    Edit
+                                </NavLink>
+                                <button className="btn btn-danger ms-auto" onClick={() => onDelete(quote.id)}>
+                                    Delete
+                                </button>
                             </li>
                         ))}
                     </ul>
