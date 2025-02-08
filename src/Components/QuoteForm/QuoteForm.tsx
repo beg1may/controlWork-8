@@ -1,4 +1,4 @@
-import {ApiQuote, ApiQuotes} from "../../types";
+import {ApiQuote} from "../../types";
 import {FormEvent, useCallback, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axiosApi from "../../axiosApi.ts";
@@ -24,34 +24,20 @@ const QuoteForm: React.FC<Props> = ({isEdit = false, idQuote, onSubmitAction, qu
     const navigate = useNavigate();
 
     const fetchQuotes = useCallback(async () => {
-        try {
-            setLoading(true);
-
-            if (!idQuote) {
-                alert("Quote ID is missing");
-                return;
+        if (idQuote) {
+            try {
+                const response = await axiosApi.get(`/quotes/${idQuote}.json`);
+                if (response.data) {
+                    setQuote(response.data);
+                } else {
+                    alert('Quote not found');
+                    navigate('/');
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                setLoading(false);
             }
-
-            const response = await axiosApi.get<ApiQuotes | null>(`quotes/${idQuote}.json`);
-
-            if (!response.data) {
-                alert('Quote not found');
-                navigate('/');
-                return;
-            }
-
-            const fetchedQuote = response.data[idQuote];
-            if (!fetchedQuote) {
-                alert('Quote not found');
-                navigate('/');
-                return;
-            }
-
-            setQuote(fetchedQuote);
-        } catch (e) {
-            alert(e);
-        } finally {
-            setLoading(false);
         }
     }, [idQuote, navigate]);
 
